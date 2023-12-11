@@ -1,5 +1,6 @@
 import os
 
+import sys
 import numpy as np
 import xlsxwriter
 from obspy.core import read
@@ -80,13 +81,18 @@ def data_alignment(folder_path, number):
                 file.writelines(lines)
 
 
-def main():
+def main(alignment_number):
     folder_path = f"{os.path.abspath('.')}\data"
     format_conversion(folder_path)
-    data_alignment(folder_path, 90000)
+    data_alignment(folder_path, alignment_number)
     data_conversion(folder_path)
     print("Finished!")
 
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) == 1:
+        main(35000)
+    elif len(sys.argv) == 2:
+        main(int(sys.argv[1]))
+    else:
+        print("Argument error!")
