@@ -2,7 +2,7 @@
 
 2. 运行 
    
-   => python main.py （默认数据对齐时长为 35 s）
+   => python main.py （默认数据对齐时长为 32.5 s）
    
    => python main.py 90000 （设置数据对齐时长为 90 s）
    

@@ -2,7 +2,7 @@ import os
 
 import sys
 import numpy as np
-import xlsxwriter
+import matplotlib.pyplot as plt
 from obspy.core import read
 
 
@@ -24,11 +24,7 @@ def format_conversion(folder_path):
 
 
 def data_conversion(folder_path):
-    workbook = xlsxwriter.Workbook(folder_path + '\\' + "result.xlsx")
-    worksheet = workbook.add_worksheet()
-
-    col = 0
-    for filename in os.listdir(folder_path):
+    for index, filename in enumerate(os.listdir(folder_path)):
         if filename.endswith(".mseed_TSPAIR"):
             file_path = os.path.join(folder_path, filename)
 
@@ -54,16 +50,16 @@ def data_conversion(folder_path):
             # 取前半部分复数的绝对值
             half_abs_fx = abs(fx[:len(freq_axis)])
 
-            row = 0
-            for i in range(len(freq_axis)):
-                # 往表格写入内容
-                worksheet.write(row, col, freq_axis[i])
-                worksheet.write(row, col + 1, half_abs_fx[i])
-                row += 1
-            col += 2
+            # 绘制散点图并将图像存储到列表中
+            plt.figure(index)
+            plt.plot(freq_axis[1:], half_abs_fx[1:], linestyle='-')
+            plt.xlabel('Frequency (Hz)')
+            plt.ylabel('Magnitude')
+            plt.title('FFT Spectrum for {}'.format(filename))  # 使用文件名作为标题
+            # plt.plot()
 
-    # 保存
-    workbook.close()
+    # 显示所有图像
+    plt.show()
 
 
 def data_alignment(folder_path, number):
@@ -91,7 +87,7 @@ def main(alignment_number):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        main(35000)
+        main(32500)
     elif len(sys.argv) == 2:
         main(int(sys.argv[1]))
     else:
