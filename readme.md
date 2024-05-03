@@ -1,10 +1,22 @@
-1. 将 "*.mseed" 文件放入 "data/" 目录中
+## 命令参数
 
-2. 运行 
-   
-   => python main.py （默认数据对齐时长为 32.5 s）
-   
-   => python main.py 90000 （设置数据对齐时长为 90 s）
-   
-3. 结果保存在 "data/result.xlsx"
+1. 数据对齐时长（-A），单位 ms，默认为 32500
+
+2. 执行效果（-E）：
+   1. 直接展示频谱图（C），默认
+   2. 导出数据到 Excel 表格（S），保存在 "data/result.xlsx"
+
+
+
+## 操作流程及命令示例
+
+1. 将 "*.mseed" 文件放入 "data/" 目录下
+
+2. 在当前目录下运行 cmd
+
+   => python main.py （默认数据对齐时长为 32.5 s，直接展示频谱图）
+
+   => python main.py -A 90000 （设置数据对齐时长为 90 s）
+
+   => python main.py -E S （导出数据到 Excel 表格）
 
