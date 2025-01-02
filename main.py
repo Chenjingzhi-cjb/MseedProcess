@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import xlsxwriter
 from obspy.core import read
 
+import matplotlib
+matplotlib.use('TkAgg')
+
 
 def data_conversion_base(filename, folder_path, alignment_count):
     file_path = os.path.join(folder_path, filename)
@@ -26,6 +29,12 @@ def data_conversion_base(filename, folder_path, alignment_count):
 
     # 计算傅里叶变换
     fx = np.fft.rfft(x)
+
+    # 计算 80-180 Hz 的 速度 RMS 值
+    velocity = 2 * np.pi * freq_axis * np.abs(fx)  # 计算速度幅值
+    freq_mask = (freq_axis >= 8) & (freq_axis <= 80)  # 提取 8 Hz 至 80 Hz 范围
+    velocity_in_band = velocity[freq_mask]
+    velocity_rms_ums = np.sqrt(np.mean(velocity_in_band ** 2)) / 1000000.0  # 计算 RMS 值
 
     # 取前半部分复数的绝对值
     half_abs_fx = abs(fx)
