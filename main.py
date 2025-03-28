@@ -67,8 +67,11 @@ def data_conversion_S(folder_path, alignment_count):
         if filename.endswith(".mseed"):
             freq_axis, half_abs_fx = data_conversion_base(filename, folder_path, alignment_count)
 
-            row = 0
-            for i in range(len(freq_axis)):
+            worksheet.write(0, col, filename.removesuffix(".mseed"))
+
+            # 去直流
+            row = 1
+            for i in range(1, len(freq_axis)):
                 # 往表格写入内容
                 worksheet.write(row, col, freq_axis[i])
                 worksheet.write(row, col + 1, half_abs_fx[i])
