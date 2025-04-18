@@ -66,9 +66,11 @@ def data_conv_pyplot(folder_path, alignment_time, cmd, freq_min, freq_max):
             if len(freq_axis) == 0:
                 continue  # 如果裁剪后为空，跳过该文件
 
+            start_idx = 1 if freq_axis[0] == 0 else 0  # 去直流
+
             # 绘制散点图并将图像存储到列表中
             plt.figure(index)
-            plt.plot(freq_axis[1:], half_abs_fx[1:], linestyle='-')
+            plt.plot(freq_axis[start_idx:], half_abs_fx[start_idx:], linestyle='-')
             plt.xlabel('Frequency (Hz)')
             plt.ylabel('Magnitude')
             plt.title('FFT Spectrum for {}'.format(filename))  # 使用文件名作为标题
