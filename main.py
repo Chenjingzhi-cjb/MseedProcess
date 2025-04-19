@@ -120,6 +120,7 @@ def data_conv_excel(folder_path, alignment_time, freq_min, freq_max):
             for i in range(start_idx, len(freq_axis)):
                 worksheet.write(row, col, freq_axis[i])
                 worksheet.write(row, col + 1, half_abs_fx[i])
+
                 row += 1
 
             # 添加数据到图表
@@ -185,9 +186,9 @@ if __name__ == '__main__':
         args.E = 'Excel'
 
     if args.FMin is None:
-        args.FMin = 10.0
+        args.FMin = 0.0
 
     if args.FMax is None:
-        args.FMax = 100.0
+        args.FMax = 500.0
 
     main(args.A, args.E, args.FMin, args.FMax)
