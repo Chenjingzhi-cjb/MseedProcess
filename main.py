@@ -157,6 +157,31 @@ def data_conv_excel(folder_path, alignment_time, freq_min, freq_max):
     workbook.close()
 
 
+def data_conv_raw(folder_path, alignment_time):
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".mseed"):
+            file_path = os.path.join(folder_path, filename)
+
+            stream = read(file_path)
+            trace = stream[0]
+
+            # 获取采样率（Fs）的值
+            fs = trace.stats.sampling_rate
+
+            # 时间 -> 数量
+            alignment_count = int(alignment_time * fs / 1000.0)
+
+            # 输入信号
+            x = np.array(trace.data)
+            if len(x) > alignment_count:
+                x = x[:alignment_count]
+
+            # 输出
+            with open(f'{file_path.removesuffix(".mseed")}_{int(fs)}.dat', 'w', encoding='utf-8') as f:
+                for i in x:
+                    f.write(f'{i}\n')
+
+
 def main(alignment_time, exec_type, freq_min, freq_max):
     folder_path = f"{os.path.abspath('.')}\data"
 
@@ -166,6 +191,8 @@ def main(alignment_time, exec_type, freq_min, freq_max):
         data_conv_pyplot(folder_path, alignment_time, "save", freq_min, freq_max)
     elif exec_type == 'Excel':
         data_conv_excel(folder_path, alignment_time, freq_min, freq_max)
+    elif exec_type == 'Raw':
+        data_conv_raw(folder_path, alignment_time)
 
     print("Finished!")
 
@@ -173,7 +200,7 @@ def main(alignment_time, exec_type, freq_min, freq_max):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Parse arguments for main.py')
     parser.add_argument('-A', type=int, help='Alignment Time')
-    parser.add_argument('-E', choices=['Plot1', 'Plot2', 'Excel'], help='Exec Type')
+    parser.add_argument('-E', choices=['Plot1', 'Plot2', 'Excel', 'Raw'], help='Exec Type')
     parser.add_argument('-FMin', type=float, help='Frequency Min')
     parser.add_argument('-FMax', type=float, help='Frequency Max')
 
